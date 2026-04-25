@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Editor — Abu Shukri</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%231a1208'/><text y='.9em' font-size='70' x='50%25' dominant-baseline='top' text-anchor='middle'>☕</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&family=Noto+Kufi+Arabic:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="landing-page admin-mode" data-lang="en" data-dir="ltr">
+
+  <div id="spa-root"></div>
+
+  <!-- ─── Admin Top Bar ──────────────────────────────── -->
+  <div id="admin-bar">
+    <div class="admin-bar-left">
+      <span class="admin-indicator"></span>
+      <span class="admin-bar-title">Admin Editor</span>
+      <span class="admin-lang-label" id="admin-lang-label">Editing: EN</span>
+    </div>
+    <div class="admin-bar-right">
+      <button type="button" id="admin-lang-toggle" class="admin-bar-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>Switch to AR</span>
+      </button>
+      <button type="button" id="admin-discard-btn" class="admin-bar-btn admin-bar-btn--danger">
+        <span>Discard</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ─── Floating Action Buttons ────────────────────── -->
+  <div id="admin-fab">
+    <button type="button" id="btn-save-draft" class="fab-btn fab-btn--draft">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      <span>Save Draft</span>
+    </button>
+    <button type="button" id="btn-publish" class="fab-btn fab-btn--publish">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>Save &amp; Publish</span>
+    </button>
+  </div>
+
+  <!-- ─── Floating Edit Pencil ───────────────────────── -->
+  <button type="button" id="admin-edit-pencil" class="admin-edit-pencil" title="Click to edit">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+  </button>
+
+  <!-- ─── Image Edit Modal ───────────────────────────── -->
+  <div id="admin-image-modal" class="admin-modal" role="dialog" aria-modal="true" aria-label="Edit Image">
+    <div class="admin-modal-backdrop"></div>
+    <div class="admin-modal-content admin-modal-content--sm">
+      <button class="admin-modal-close" type="button" aria-label="Close">&times;</button>
+      <h3 class="admin-modal-heading">Edit Image</h3>
+      <div class="admin-modal-body">
+        <label class="admin-field-label">Image URL</label>
+        <input type="url" id="admin-image-url-input" class="admin-field-input" placeholder="https://example.com/image.jpg" />
+        <label class="admin-field-label" style="margin-top:1rem;">Or Upload File</label>
+        <input type="file" id="admin-image-file-input" class="admin-field-input" accept="image/*" />
+        <div id="admin-image-preview-wrap" class="admin-image-preview-wrap" style="display:none;">
+          <img id="admin-image-preview" src="" alt="Preview" />
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="admin-btn admin-btn--ghost admin-modal-cancel">Cancel</button>
+        <button type="button" class="admin-btn admin-btn--primary" id="admin-image-apply">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Item Edit Modal (branches, social links, etc.) -->
+  <div id="admin-item-modal" class="admin-modal" role="dialog" aria-modal="true" aria-label="Edit Item">
+    <div class="admin-modal-backdrop"></div>
+    <div class="admin-modal-content">
+      <button class="admin-modal-close" type="button" aria-label="Close">&times;</button>
+      <h3 class="admin-modal-heading" id="admin-item-modal-title">Edit Item</h3>
+      <div class="admin-modal-body" id="admin-item-modal-body"></div>
+      <div class="admin-modal-footer">
+        <button type="button" class="admin-btn admin-btn--ghost admin-modal-cancel">Cancel</button>
+        <button type="button" class="admin-btn admin-btn--primary" id="admin-item-apply">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Confirm Modal ──────────────────────────────── -->
+  <div id="admin-confirm-modal" class="admin-modal" role="dialog" aria-modal="true" aria-label="Confirm">
+    <div class="admin-modal-backdrop"></div>
+    <div class="admin-modal-content admin-modal-content--sm">
+      <button class="admin-modal-close" type="button" aria-label="Close">&times;</button>
+      <h3 class="admin-modal-heading">Confirm</h3>
+      <div class="admin-modal-body">
+        <p id="admin-confirm-message">Are you sure?</p>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="admin-btn admin-btn--ghost admin-modal-cancel">Cancel</button>
+        <button type="button" class="admin-btn admin-btn--danger" id="admin-confirm-ok">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Toast ──────────────────────────────────────── -->
+  <div id="admin-toast" role="status" aria-live="polite"></div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

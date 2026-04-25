@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Editor — Abu Shukri Menu</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%230f0d0a'/><text y='.9em' font-size='70' x='50%25' dominant-baseline='top' text-anchor='middle'>☕</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cairo:wght@300;400;600;700&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/admin-menu.css" />
+</head>
+<body class="menu-page admin-mode" data-lang="en" data-dir="ltr">
+
+  <!-- ═══ ADMIN TOP BAR ═══ -->
+  <div id="admin-bar">
+    <div class="admin-bar-left">
+      <span class="admin-indicator"></span>
+      <span class="admin-bar-title">Menu Admin</span>
+    </div>
+    <div class="admin-bar-right">
+      <button type="button" id="admin-discard-btn" class="admin-bar-btn admin-bar-btn--danger">Discard</button>
+    </div>
+  </div>
+
+  <!-- ═══ FLOATING ACTION BUTTONS ═══ -->
+  <div id="admin-fab">
+    <button type="button" id="btn-add-category" class="fab-btn fab-btn--ghost">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      <span>Add Category</span>
+    </button>
+    <button type="button" id="btn-add-item" class="fab-btn fab-btn--gold">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>Add Item</span>
+    </button>
+    <button type="button" id="btn-save-draft" class="fab-btn fab-btn--dark">Save Draft</button>
+    <button type="button" id="btn-publish" class="fab-btn fab-btn--gold">Publish</button>
+  </div>
+
+  <!-- ═══ CATEGORY EDIT MODAL ═══ -->
+  <div id="modal-category" class="admin-modal" role="dialog" aria-modal="true">
+    <div class="admin-modal-backdrop"></div>
+    <div class="admin-modal-content">
+      <button class="admin-modal-close" type="button">&times;</button>
+      <h3 class="admin-modal-heading" id="modal-cat-title">Add Category</h3>
+      <div class="admin-modal-body">
+        <div class="admin-row-2">
+          <div class="admin-field">
+            <label class="admin-field-label">Title <span class="lang-badge lang-badge--en">EN</span></label>
+            <input type="text" id="cat-title" class="admin-field-input" />
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">العنوان <span class="lang-badge lang-badge--ar">AR</span></label>
+            <input type="text" id="cat-title-ar" class="admin-field-input" dir="rtl" />
+          </div>
+        </div>
+        <div class="admin-row-2">
+          <div class="admin-field">
+            <label class="admin-field-label">Eyebrow <span class="lang-badge lang-badge--en">EN</span></label>
+            <input type="text" id="cat-eyebrow" class="admin-field-input" placeholder="e.g. Signature" />
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">العنوان الفرعي <span class="lang-badge lang-badge--ar">AR</span></label>
+            <input type="text" id="cat-eyebrow-ar" class="admin-field-input" dir="rtl" />
+          </div>
+        </div>
+        <div class="admin-row-2">
+          <div class="admin-field">
+            <label class="admin-field-label">Icon (Emoji)</label>
+            <input type="text" id="cat-icon" class="admin-field-input" maxlength="2" />
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Slug <span class="slug-auto-hint" id="cat-slug-hint">Auto from title</span></label>
+            <input type="text" id="cat-slug" class="admin-field-input" />
+          </div>
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="admin-btn admin-btn--ghost admin-modal-cancel">Cancel</button>
+        <button type="button" class="admin-btn admin-btn--gold" id="cat-apply">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ITEM EDIT MODAL ═══ -->
+  <div id="modal-item" class="admin-modal" role="dialog" aria-modal="true">
+    <div class="admin-modal-backdrop"></div>
+    <div class="admin-modal-content admin-modal-content--lg">
+      <button class="admin-modal-close" type="button">&times;</button>
+      <h3 class="admin-modal-heading" id="modal-item-title">Add Item</h3>
+      <div class="admin-modal-body">
+
+        <div class="admin-row-2">
+          <div class="admin-field">
+            <label class="admin-field-label">Item Name <span class="lang-badge lang-badge--en">EN</span></label>
+            <input type="text" id="item-name" class="admin-field-input" />
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">اسم الصنف <span class="lang-badge lang-badge--ar">AR</span></label>
+            <input type="text" id="item-name-ar" class="admin-field-input" dir="rtl" />
+          </div>
+        </div>
+
+        <div class="admin-row-2">
+          <div class="admin-field">
+            <label class="admin-field-label">Category</label>
+            <select id="item-category" class="admin-field-input"></select>
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Badge</label>
+            <input type="text" id="item-badge" class="admin-field-input" placeholder="e.g. Signature" />
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label class="admin-field-label">Description <span class="lang-badge lang-badge--en">EN</span></label>
+          <textarea id="item-desc" class="admin-field-input" rows="2"></textarea>
+        </div>
+        <div class="admin-field">
+          <label class="admin-field-label">الوصف <span class="lang-badge lang-badge--ar">AR</span></label>
+          <textarea id="item-desc-ar" class="admin-field-input" rows="2" dir="rtl"></textarea>
+        </div>
+
+        <h4 class="admin-section-sub">Pricing</h4>
+        <div class="admin-field" style="max-width:220px;">
+          <label class="admin-field-label">Base Price (₪)</label>
+          <input type="number" id="item-base-price" class="admin-field-input" step="0.1" min="0" />
+        </div>
+
+        <h4 class="admin-section-sub">Discount</h4>
+        <div class="admin-discount-wrap">
+          <div class="admin-discount-type" id="disc-type-toggle">
+            <button type="button" class="disc-type-btn active" data-type="percent"><span>%</span> Percent</button>
+            <button type="button" class="disc-type-btn" data-type="fixed"><span>₪</span> Fixed</button>
+          </div>
+          <div class="admin-field admin-discount-value">
+            <label class="admin-field-label">Value</label>
+            <input type="number" id="item-disc-value" class="admin-field-input" step="0.1" min="0" placeholder="0" />
+          </div>
+          <div class="admin-discount-preview" id="discount-preview">
+            <span class="disc-preview-label" id="disc-preview-label"></span>
+            <span class="disc-preview-price" id="disc-preview-price"></span>
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label class="admin-field-label">Slug <span class="slug-auto-hint" id="item-slug-hint">Auto from name</span></label>
+          <input type="text" id="item-slug" class="admin-field-input" />
+        </div>
+
+        <h4 class="admin-section-sub">Images</h4>
+        <p class="admin-hint-text">First image is the cover. Drag or use arrows to reorder.</p>
+        <div class="admin-img-scroll" id="item-images-scroll"></div>
+        <div class="admin-img-upload-row">
+          <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" id="item-upload-img">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Image
+          </button>
+          <input type="file" id="item-file-input" accept="image/*" multiple hidden />
+        </div>
+
+        <h4 class="admin-section-sub">Sizes</h4>
+        <div id="item-sizes-list" class="admin-dynamic-list"></div>
+        <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" id="item-add-size">+ Add Size</button>
+
+        <h4 class="admin-section-sub">Add-ons / Extras</h4>
+        <div id="item-addons-list" class="admin-dynamic-list"></div>
+        <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" id="item-add-addon">+ Add Extra</button>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="admin-btn admin-btn--ghost admin-modal-cancel">Cancel</button>
+        <button type="button" class="admin-btn admin-btn--gold" id="item-apply">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ CONFIRM DELETE MODAL ═══ -->
+  <div id="modal-confirm" class="admin-modal" role="dialog" aria-modal="true">
+    <div class="admin-modal-backdrop"></div>
+    <div class="admin-modal-content admin-modal-content--sm">
+      <button class="admin-modal-close" type="button">&times;</button>
+      <h3 class="admin-modal-heading">Confirm Delete</h3>
+      <div class="admin-modal-body"><p id="confirm-message">Are you sure?</p></div>
+      <div class="admin-modal-footer">
+        <button type="button" class="admin-btn admin-btn--ghost admin-modal-cancel">Cancel</button>
+        <button type="button" class="admin-btn admin-btn--danger" id="confirm-ok">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TOAST ═══ -->
+  <div id="admin-toast" role="status" aria-live="polite"></div>
+
+  <!-- ═══ MENU HTML SHELL ═══ -->
+  <div id="spa-root">
+    <div class="public-shell" data-public-shell="menu">
+      <nav class="site-nav">
+        <a href="#home" class="nav-logo">
+          <img src="https://images.unsplash.com/photo-1559305616-3f99cd43e353?w=200&h=200&fit=crop" alt="ABU SHUKRI" />
+          <span>ABU SHUKRI</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#locations">Locations</a></li>
+        </ul>
+        <div class="site-nav-actions">
+          <a href="#" class="lang-toggle-link" id="lang-toggle">AR</a>
+          <button class="hamburger" type="button" aria-label="Menu"><span></span><span></span><span></span></button>
+        </div>
+      </nav>
+
+      <main class="menu-main">
+        <section class="menu-context" aria-label="Menu metadata">
+          <p class="menu-context-eye" id="ctx-eyebrow">Normal Menu</p>
+          <h1 class="menu-context-title" id="ctx-title">Abu Shukri Main Menu</h1>
+          <p class="menu-context-description" id="ctx-desc">A bilingual, branch-ready menu with categories, item drawers, sizes, add-ons, and scheduled offers.</p>
+          <div class="menu-context-row" id="ctx-row">
+            <span class="menu-context-chip"><b>Location:</b> Ein Yabroud - Main Street</span>
+            <span class="menu-context-chip"><b>Hours:</b> Daily · 7:00 AM - 10:00 PM</span>
+            <span class="menu-context-chip"><b>Phone:</b> <span dir="ltr">+970 592 200 201</span></span>
+          </div>
+        </section>
+        <div class="cats" id="menu-categories"></div>
+        <div id="menu-sections"></div>
+      </main>
+
+      <div id="backdrop" aria-hidden="true">
+        <aside id="sheet" role="dialog" aria-modal="true" aria-label="Item details">
+          <div class="sheet-handle"></div>
+          <div class="sheet-head">
+            <img class="sheet-image" id="sheetImage" src="" alt="" />
+            <button class="close-sheet" id="closeSheet" type="button" aria-label="Close">&#10005;</button>
+          </div>
+          <div class="sheet-body">
+            <h3 class="sheet-name" id="sheetName"></h3>
+            <p class="sheet-desc" id="sheetDesc"></p>
+            <div class="sizes" id="sizesWrap"><span class="opt-label">Choose size</span><div class="size-grid" id="sizeGrid"></div></div>
+            <div class="adds" id="addsWrap"><span class="opt-label">Add extras</span><div class="add-grid" id="addGrid"></div></div>
+            <div class="sheet-footer">
+              <span class="price-note">Final price updates with selected size and extras</span>
+              <div class="total" id="total">0 &#8362;</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <footer class="menu-footer">
+        <div class="container"><div class="footer-inner">
+          <a href="#home" class="footer-logo">
+            <img src="https://images.unsplash.com/photo-1559305616-3f99cd43e353?w=200&h=200&fit=crop" alt="ABU SHUKRI" />
+            <span>ABU SHUKRI</span>
+          </a>
+          <p class="footer-copy">&copy; 2026 ABU SHUKRI. All rights reserved.</p>
+        </div></div>
+      </footer>
+
+      <script id="menu-state" type="application/json">{
+  "branch": {
+    "address": "Ein Yabroud, Main Street, opposite the mosque",
+    "address_ar": "عين يبرود، الشارع الرئيسي، مقابل المسجد",
+    "hours": "Daily · 7:00 AM - 10:00 PM",
+    "hours_ar": "يومياً · 7:00 ص - 10:00 م",
+    "name": "Ein Yabroud - Main Street",
+    "name_ar": "عين يبرود - الشارع الرئيسي",
+    "phone_numbers": ["+970 592 200 201"],
+    "slug": "ein-yabroud-main-street"
+  },
+  "menu": {
+    "categories": [
+      {
+        "eyebrow": "Signature",
+        "eyebrow_ar": "مميز",
+        "icon": "🥯",
+        "items": [
+          {
+            "addons": [
+              {"label": "Extra Cream Cheese", "label_ar": "جبنة كريمية إضافية", "price": 2},
+              {"label": "Avocado", "label_ar": "أفوكادو", "price": 3}
+            ],
+            "badge": "Signature",
+            "base_price": 15.0,
+            "discount_type": "percent",
+            "discount_value": 0,
+            "discount_label": "",
+            "discounted_price": null,
+            "image_url": "https://images.unsplash.com/photo-1612203985729-70726954388c?auto=format&fit=crop&w=800&q=80",
+            "images": ["https://images.unsplash.com/photo-1612203985729-70726954388c?auto=format&fit=crop&w=800&q=80"],
+            "name": "Abu Shukri Bagel",
+            "name_ar": "باجل أبو شكري",
+            "description": "Cream cheese, avocado, roast beef, tomato, and honey mustard.",
+            "description_ar": "جبنة كريمية، أفوكادو، لحم مشوي، طماطم، وخردل العسل.",
+            "price": 15.0,
+            "sizes": [
+              {"label": "Half", "label_ar": "نصف", "delta_price": 0},
+              {"label": "Whole", "label_ar": "كامل", "delta_price": 2}
+            ],
+            "slug": "abu-shukri-bagel"
+          },
+          {
+            "addons": [],
+            "badge": "Premium",
+            "base_price": 18.0,
+            "discount_type": "percent",
+            "discount_value": 15,
+            "discount_label": "15% OFF",
+            "discounted_price": 15.3,
+            "image_url": "https://images.unsplash.com/photo-1585325701956-60dd9c8553bc?auto=format&fit=crop&w=800&q=80",
+            "images": ["https://images.unsplash.com/photo-1585325701956-60dd9c8553bc?auto=format&fit=crop&w=800&q=80"],
+            "name": "Salmon Bagel",
+            "name_ar": "باجل السلمون",
+            "description": "Cream cheese, capers, salmon, tomato, and red onion.",
+            "description_ar": "جبنة كريمية، كبر، سلمون، طماطم، وبصل أحمر.",
+            "price": 18.0,
+            "sizes": [],
+            "slug": "salmon-bagel"
+          }
+        ],
+        "slug": "signature-bagels",
+        "title": "Signature Bagels",
+        "title_ar": "باجلز مميز"
+      },
+      {
+        "eyebrow": "Fresh",
+        "eyebrow_ar": "طازج",
+        "icon": "🥪",
+        "items": [
+          {
+            "addons": [{"label": "Extra Sauce", "label_ar": "صوص إضافي", "price": 1}],
+            "badge": "",
+            "base_price": 12.0,
+            "discount_type": "fixed",
+            "discount_value": 0,
+            "discount_label": "",
+            "discounted_price": null,
+            "image_url": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80",
+            "images": ["https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80"],
+            "name": "Roast Beef Sandwich",
+            "name_ar": "ساندويتش لحم مشوي",
+            "description": "Mayonnaise, cheese, roast beef, tomato, cucumber, and lettuce.",
+            "description_ar": "مايونيز، جبنة، لحم مشوي، طماطم، خيار، وخس.",
+            "price": 12.0,
+            "sizes": [],
+            "slug": "roast-beef-sandwich"
+          }
+        ],
+        "slug": "fresh-sandwiches",
+        "title": "Fresh Sandwiches",
+        "title_ar": "ساندويتشات طازجة"
+      },
+      {
+        "eyebrow": "Hot & Cold",
+        "eyebrow_ar": "ساخن وبارد",
+        "icon": "☕",
+        "items": [
+          {
+            "addons": [
+              {"label": "Extra Shot", "label_ar": "شوت إضافي", "price": 2},
+              {"label": "Oat Milk", "label_ar":
+## File 1: `index.html`
+
+```html
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Editor — Abu Shukri Menu</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%230f0d0a'/><text y='.9em' font-size='70' x='50%25' dominant-baseline='top' text-anchor='middle'>☕</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cairo:wght@300;400;600;700&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/admin-menu.css" />
+</head>
+<body class="menu-page admin-mode" data-lang="en" data-dir="ltr">
+
+  <!-- ═══ ADMIN TOP BAR ═══ -->
+  <div id="admin-bar">
+    <div class="admin-bar-left">
+      <span class="admin-indicator"></span>
+      <span class="admin-bar-title">Menu Admin</span>
+    </div>
+    <div class="admin-bar-right">
+      <button type="button" id="admin-discard-btn" class="admin-bar-btn admin-bar-btn--danger">Discard</button>
+    </div>
+  </div>
+
+  <!-- ═══ FLOATING ACTION BUTTONS ═══ -->
+  <div id="admin-fab">
+    <button type="button" id="btn-add-category" class="fab-btn fab-btn--ghost">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      <span>Add Category</span>
+    </button>
+    <button type="button" id="btn-add-item" class="fab-btn fab-btn--gold">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>Add Item</span>
+    </button>
+    <button type="button" id="btn-save-draft" class="fab-btn fab-btn--dark">Save Draft</button>
+    <button type="button" id="btn-publish" class="fab-btn fab-btn--gold">Publish</button>
+  </div>
+
+  <!-- ═══ CATEGORY EDIT MODAL ═══ -->
+  <div id="modal-category" class="admin-modal" role="dialog" aria-modal="true">
+    <div class="admin-modal-backdrop"></div>
+    <div class="admin-modal-content">
+      <button class="admin-modal-close" type="button">&times;</button>
+      <h3 class="admin-modal-heading" id="modal-cat-title">Add Category</h3>
+      <div class="admin-modal-body">
+        <div class="admin-row-2">
+          <div class="admin-field">
+            <label class="admin-field-label">Title <span class="lang-badge lang-badge--en">EN</span></label>
+            <input type="text" id="cat-title" class="admin-field-input" />
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">العنوان <span class="lang-badge lang-badge--ar">AR</span></label>
+            <input type="text" id="cat-title-ar" class="admin-field-input" dir="rtl" />
+          </div>
+        </div>
+        <div class="admin-row-2">
+          <div class="admin-field">
+            <label class="admin-field-label">Eyebrow <span class="lang-badge lang-badge--en">EN</span></label>
+            <input type="text" id="cat-eyebrow" class="admin-field-input" placeholder="e.g. Signature" />
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">العنوان الفرعي <span class="lang-badge lang-badge--ar">AR</span></label>
+            <input type="text" id="cat-eyebrow-ar" class="admin-field-input" dir="rtl" />
+          </div>
+        </div>
+        <div class="admin-row-2">
+          <div class="admin-field">
+            <label class="admin-field-label">Icon (Emoji)</label>
+            <input type="text" id="cat-icon" class="admin-field-input" maxlength="2" />
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Slug <span class="slug-auto-hint" id="cat-slug-hint">Auto from title</span></label>
+            <input type="text" id="cat-slug" class="admin-field-input" />
+          </div>
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="admin-btn admin-btn--ghost admin-modal-cancel">Cancel</button>
+        <button type="button" class="admin-btn admin-btn--gold" id="cat-apply">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ITEM EDIT MODAL ═══ -->
+  <div id="modal-item" class="admin-modal" role="dialog" aria-modal="true">
+    <div class="admin-modal-backdrop"></div>
+    <div class="admin-modal-content admin-modal-content--lg">
+      <button class="admin-modal-close" type="button">&times;</button>
+      <h3 class="admin-modal-heading" id="modal-item-title">Add Item</h3>
+      <div class="admin-modal-body">
+
+        <div class="admin-row-2">
+          <div class="admin-field">
+            <label class="admin-field-label">Item Name <span class="lang-badge lang-badge--en">EN</span></label>
+            <input type="text" id="item-name" class="admin-field-input" />
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">اسم الصنف <span class="lang-badge lang-badge--ar">AR</span></label>
+            <input type="text" id="item-name-ar" class="admin-field-input" dir="rtl" />
+          </div>
+        </div>
+
+        <div class="admin-row-2">
+          <div class="admin-field">
+            <label class="admin-field-label">Category</label>
+            <select id="item-category" class="admin-field-input"></select>
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Badge</label>
+            <input type="text" id="item-badge" class="admin-field-input" placeholder="e.g. Signature" />
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label class="admin-field-label">Description <span class="lang-badge lang-badge--en">EN</span></label>
+          <textarea id="item-desc" class="admin-field-input" rows="2"></textarea>
+        </div>
+        <div class="admin-field">
+          <label class="admin-field-label">الوصف <span class="lang-badge lang-badge--ar">AR</span></label>
+          <textarea id="item-desc-ar" class="admin-field-input" rows="2" dir="rtl"></textarea>
+        </div>
+
+        <h4 class="admin-section-sub">Pricing</h4>
+        <div class="admin-field" style="max-width:220px;">
+          <label class="admin-field-label">Base Price (₪)</label>
+          <input type="number" id="item-base-price" class="admin-field-input" step="0.1" min="0" />
+        </div>
+
+        <h4 class="admin-section-sub">Discount</h4>
+        <div class="admin-discount-wrap">
+          <div class="admin-discount-type" id="disc-type-toggle">
+            <button type="button" class="disc-type-btn active" data-type="percent"><span>%</span> Percent</button>
+            <button type="button" class="disc-type-btn" data-type="fixed"><span>₪</span> Fixed</button>
+          </div>
+          <div class="admin-field admin-discount-value">
+            <label class="admin-field-label">Value</label>
+            <input type="number" id="item-disc-value" class="admin-field-input" step="0.1" min="0" placeholder="0" />
+          </div>
+          <div class="admin-discount-preview" id="discount-preview">
+            <span class="disc-preview-label" id="disc-preview-label"></span>
+            <span class="disc-preview-price" id="disc-preview-price"></span>
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label class="admin-field-label">Slug <span class="slug-auto-hint" id="item-slug-hint">Auto from name</span></label>
+          <input type="text" id="item-slug" class="admin-field-input" />
+        </div>
+
+        <h4 class="admin-section-sub">Images</h4>
+        <p class="admin-img-help">First image is the cover. Use arrows to reorder.</p>
+        <div class="admin-img-scroll" id="item-images-scroll"></div>
+        <div class="admin-img-upload-row">
+          <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" id="item-upload-img">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Image
+          </button>
+          <input type="file" id="item-file-input" accept="image/*" multiple hidden />
+        </div>
+
+        <h4 class="admin-section-sub">Sizes</h4>
+        <div id="item-sizes-list" class="admin-dynamic-list"></div>
+        <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" id="item-add-size">+ Add Size</button>
+
+        <h4 class="admin-section-sub">Add-ons / Extras</h4>
+        <div id="item-addons-list" class="admin-dynamic-list"></div>
+        <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" id="item-add-addon">+ Add Extra</button>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="admin-btn admin-btn--ghost admin-modal-cancel">Cancel</button>
+        <button type="button" class="admin-btn admin-btn--gold" id="item-apply">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ CONFIRM DELETE MODAL ═══ -->
+  <div id="modal-confirm" class="admin-modal" role="dialog" aria-modal="true">
+    <div class="admin-modal-backdrop"></div>
+    <div class="admin-modal-content admin-modal-content--sm">
+      <button class="admin-modal-close" type="button">&times;</button>
+      <h3 class="admin-modal-heading">Confirm Delete</h3>
+      <div class="admin-modal-body"><p id="confirm-message">Are you sure?</p></div>
+      <div class="admin-modal-footer">
+        <button type="button" class="admin-btn admin-btn--ghost admin-modal-cancel">Cancel</button>
+        <button type="button" class="admin-btn admin-btn--danger" id="confirm-ok">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TOAST ═══ -->
+  <div id="admin-toast" role="status" aria-live="polite"></div>
+
+  <!-- ═══ MENU HTML SHELL ═══ -->
+  <div id="spa-root">
+    <div class="public-shell" data-public-shell="menu">
+      <nav class="site-nav">
+        <a href="#home" class="nav-logo">
+          <img src="https://images.unsplash.com/photo-1559305616-3f99cd43e353?w=200&h=200&fit=crop" alt="ABU SHUKRI" />
+          <span>ABU SHUKRI</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#locations">Locations</a></li>
+        </ul>
+        <div class="site-nav-actions">
+          <a href="#" class="lang-toggle-link" id="lang-toggle">AR</a>
+          <button class="hamburger" type="button" aria-label="Menu"><span></span><span></span><span></span></button>
+        </div>
+      </nav>
+
+      <main class="menu-main">
+        <section class="menu-context" aria-label="Menu metadata">
+          <p class="menu-context-eye" id="ctx-eyebrow">Normal Menu</p>
+          <h1 class="menu-context-title" id="ctx-title">Abu Shukri Main Menu</h1>
+          <p class="menu-context-description" id="ctx-desc">A bilingual, branch-ready menu with categories, item drawers, sizes, add-ons, and scheduled offers.</p>
+          <div class="menu-context-row" id="ctx-row">
+            <span class="menu-context-chip"><b>Location:</b> Ein Yabroud - Main Street</span>
+            <span class="menu-context-chip"><b>Hours:</b> Daily · 7:00 AM - 10:00 PM</span>
+            <span class="menu-context-chip"><b>Phone:</b> <span dir="ltr">+970 592 200 201</span></span>
+          </div>
+        </section>
+        <div class="cats" id="menu-categories"></div>
+        <div id="menu-sections"></div>
+      </main>
+
+      <div id="backdrop" aria-hidden="true">
+        <aside id="sheet" role="dialog" aria-modal="true" aria-label="Item details">
+          <div class="sheet-handle"></div>
+          <div class="sheet-head">
+            <img class="sheet-image" id="sheetImage" src="" alt="" />
+            <button class="close-sheet" id="closeSheet" type="button" aria-label="Close">&#10005;</button>
+          </div>
+          <div class="sheet-body">
+            <h3 class="sheet-name" id="sheetName"></h3>
+            <p class="sheet-desc" id="sheetDesc"></p>
+            <div class="sizes" id="sizesWrap"><span class="opt-label">Choose size</span><div class="size-grid" id="sizeGrid"></div></div>
+            <div class="adds" id="addsWrap"><span class="opt-label">Add extras</span><div class="add-grid" id="addGrid"></div></div>
+            <div class="sheet-footer">
+              <span class="price-note">Final price updates with selected size and extras</span>
+              <div class="total" id="total">0 &#8362;</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <footer class="menu-footer">
+        <div class="container"><div class="footer-inner">
+          <a href="#home" class="footer-logo">
+            <img src="https://images.unsplash.com/photo-1559305616-3f99cd43e353?w=200&h=200&fit=crop" alt="ABU SHUKRI" />
+            <span>ABU SHUKRI</span>
+          </a>
+          <p class="footer-copy">&copy; 2026 ABU SHUKRI. All rights reserved.</p>
+        </div></div>
+      </footer>
+
+      <script id="menu-state" type="application/json">{
+  "branch": {
+    "address": "Ein Yabroud, Main Street, opposite the mosque",
+    "address_ar": "عين يبرود، الشارع الرئيسي، مقابل المسجد",
+    "hours": "Daily · 7:00 AM - 10:00 PM",
+    "hours_ar": "يومياً · 7:00 ص - 10:00 م",
+    "name": "Ein Yabroud - Main Street",
+    "name_ar": "عين يبرود - الشارع الرئيسي",
+    "phone_numbers": ["+970 592 200 201"],
+    "slug": "ein-yabroud-main-street"
+  },
+  "menu": {
+    "categories": [
+      {
+        "eyebrow": "Signature",
+        "eyebrow_ar": "مميز",
+        "icon": "🥯",
+        "items": [
+          {
+            "addons": [
+              {"label": "Extra Cream Cheese", "label_ar": "جبنة كريمية إضافية", "price": 2},
+              {"label": "Avocado", "label_ar": "أفوكادو", "price": 3}
+            ],
+            "badge": "Signature",
+            "base_price": 15.0,
+            "discount_type": "percent",
+            "discount_value": 0,
+            "discount_label": "",
+            "discounted_price": null,
+            "image_url": "https://images.unsplash.com/photo-1612203985729-70726954388c?auto=format&fit=crop&w=800&q=80",
+            "images": ["https://images.unsplash.com/photo-1612203985729-70726954388c?auto=format&fit=crop&w=800&q=80"],
+            "name": "Abu Shukri Bagel",
+            "name_ar": "باجل أبو شكري",
+            "description": "Cream cheese, avocado, roast beef, tomato, and honey mustard.",
+            "description_ar": "جبنة كريمية، أفوكادو، لحم مشوي، طماطم، وخردل العسل.",
+            "price": 15.0,
+            "sizes": [
+              {"label": "Half", "label_ar": "نصف", "delta_price": 0},
+              {"label": "Whole", "label_ar": "كامل", "delta_price": 2}
+            ],
+            "slug": "abu-shukri-bagel"
+          },
+          {
+            "addons": [],
+            "badge": "Premium",
+            "base_price": 18.0,
+            "discount_type": "percent",
+            "discount_value": 15,
+            "discount_label": "15% OFF",
+            "discounted_price": 15.3,
+            "image_url": "https://images.unsplash.com/photo-1585325701956-60dd9c8553bc?auto=format&fit=crop&w=800&q=80",
+            "images": ["https://images.unsplash.com/photo-1585325701956-60dd9c8553bc?auto=format&fit=crop&w=800&q=80"],
+            "name": "Salmon Bagel",
+            "name_ar": "باجل السلمون",
+            "description": "Cream cheese, capers, salmon, tomato, and red onion.",
+            "description_ar": "جبنة كريمية، كبر، سلمون، طماطم، وبصل أحمر.",
+            "price": 18.0,
+            "sizes": [],
+            "slug": "salmon-bagel"
+          }
+        ],
+        "slug": "signature-bagels",
+        "title": "Signature Bagels",
+        "title_ar": "باجلز مميز"
+      },
+      {
+        "eyebrow": "Fresh",
+        "eyebrow_ar": "طازج",
+        "icon": "🥪",
+        "items": [
+          {
+            "addons": [{"label": "Extra Sauce", "label_ar": "صوص إضافي", "price": 1}],
+            "badge": "",
+            "base_price": 12.0,
+            "discount_type": "fixed",
+            "discount_value": 0,
+            "discount_label": "",
+            "discounted_price": null,
+            "image_url": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80",
+            "images": ["https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80"],
+            "name": "Roast Beef Sandwich",
+            "name_ar": "ساندويتش لحم مشوي",
+            "description": "Mayonnaise, cheese, roast beef, tomato, cucumber, and lettuce.",
+            "description_ar": "مايونيز، جبنة، لحم مشوي، طماطم، خيار، وخس.",
+            "price": 12.0,
+            "sizes": [],
+            "slug": "roast-beef-sandwich"
+          }
+        ],
+        "slug": "fresh-sandwiches",
+        "title": "Fresh Sandwiches",
+        "title_ar": "ساندويتشات طازجة"
+      },
+      {
+        "eyebrow": "Hot & Cold",
+        "eyebrow_ar": "ساخن وبارد",
+        "icon": "☕",
+        "items": [
+          {
+            "addons": [
+              {"label": "Extra Shot", "label_ar": "شوت إضافي", "price": 2},
+              {"label": "Oat Milk", "label_ar": "حليب الشوفان", "price": 2}
+            ],
+            "badge": "",
+            "base_price": 8.0,
+            "discount_type": "percent",
+            "discount_value": 0,
+            "discount_label": "",
+            "discounted_price": null,
+            "image_url": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
+            "images": ["https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80"],
+            "name": "American Coffee",
+            "name_ar": "قهوة أمريكية",
+            "description": "Freshly brewed coffee with optional milk upgrades.",
+            "description_ar": "قهوة طازجة مع خيارات حليب إضافية.",
+            "price": 8.0,
+            "sizes": [
+              {"label": "Small", "label_ar": "صغير", "delta_price": 0},
+              {"label": "Medium", "label_ar": "وسط", "delta_price": 2},
+              {"label": "Large", "label_ar": "كبير", "delta_price": 4}
+            ],
+            "slug": "american-coffee"
+          }
+        ],
+        "slug": "drinks",
+        "title": "Cold & Hot Drinks",
+        "title_ar": "مشروبات باردة وساخنة"
+      }
+    ],
+    "description": "A bilingual, branch-ready menu.",
+    "description_ar": "قائمة ثنائية اللغة جاهزة للفروع.",
+    "id": 1,
+    "name": "Abu Shukri Main Menu",
+    "name_ar": "قائمة أبو شكري الرئيسية",
+    "slug": "main-menu",
+    "type": "normal",
+    "type_label": "Normal Menu"
+  },
+  "ui": {
+    "add_extras": "Add extras",
+    "add_extras_ar": "أضف إضافات",
+    "back_to_locations": "Back to locations",
+    "back_to_locations_ar": "العودة للمواقع",
+    "base_label": "Base",
+    "base_label_ar": "أساسي",
+    "choose_size": "Choose size",
+    "choose_size_ar": "اختر الحجم",
+    "extras_count": "extras",
+    "extras_count_ar": "إضافات",
+    "final_price_note": "Final price updates with selected size and extras",
+    "final_price_note_ar": "السعر النهائي يتغير حسب الحجم والإضافات",
+    "google_maps": "Google Maps",
+    "google_maps_ar": "خرائط جوجل",
+    "hours_label": "Hours",
+    "hours_label_ar": "ساعات العمل",
+    "phone_label": "Phone",
+    "phone_label_ar": "هاتف",
+    "size_count": "sizes",
+    "size_count_ar": "أحجام"
+  }
+}</script>
+    </div>
+  </div>
+
+  <script src="js/admin-menu.js"></script>
+</body>
+</html>
