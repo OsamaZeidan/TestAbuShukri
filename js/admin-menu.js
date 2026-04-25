@@ -107,14 +107,14 @@
     $('#ctx-title').textContent = t(menu.name, menu.name_ar);
     $('#ctx-desc').textContent = t(menu.description, menu.description_ar);
     $('#ctx-row').innerHTML = `
-      <span class="menu-context-chip"><b>${t('Location:','الموقع:')}</b> ${t(branch.name, branch.name_ar)}</span>
-      <span class="menu-context-chip"><b>${t('Hours:','ساعات العمل:')}</b> ${t(branch.hours, branch.hours_ar)}</span>
-      <span class="menu-context-chip"><b>${t('Phone:','هاتف:')}</b> <span dir="ltr">${branch.phone_numbers[0]}</span></span>
+      <span class="menu-context-chip"><b>${t('Location:', 'الموقع:')}</b> ${t(branch.name, branch.name_ar)}</span>
+      <span class="menu-context-chip"><b>${t('Hours:', 'ساعات العمل:')}</b> ${t(branch.hours, branch.hours_ar)}</span>
+      <span class="menu-context-chip"><b>${t('Phone:', 'هاتف:')}</b> <span dir="ltr">${branch.phone_numbers[0]}</span></span>
     `;
 
     const cats = menu.categories;
     if (!cats.length) {
-      secsWrap.innerHTML = '<p style="color:var(--muted);font-family:Cairo,sans-serif;text-align:center;padding:3rem;">No categories yet. Click "Add Category" to start.</p>';
+      secsWrap.innerHTML = `<p style="color:var(--muted);font-family:Cairo,sans-serif;text-align:center;padding:3rem;">${t('No categories yet. Click "Add Category" to start.', 'لا توجد فئات بعد. انقر على "إضافة فئة" للبدء.')}</p>`;
       return;
     }
 
@@ -130,16 +130,16 @@
       btn.innerHTML = `
         <span class="ic">${cat.icon || ''}</span>${displayTitle}
         <span class="admin-cat-actions">
-          <button class="admin-act-btn reorder" data-action="cat-left" data-ci="${ci}" title="Move Left">
+          <button class="admin-act-btn reorder" data-action="cat-left" data-ci="${ci}" title="${t('Move Left', 'تحريك لليسار')}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
-          <button class="admin-act-btn reorder" data-action="cat-right" data-ci="${ci}" title="Move Right">
+          <button class="admin-act-btn reorder" data-action="cat-right" data-ci="${ci}" title="${t('Move Right', 'تحريك لليمين')}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
-          <button class="admin-act-btn edit" data-action="edit-cat" data-ci="${ci}" title="Edit Category">
+          <button class="admin-act-btn edit" data-action="edit-cat" data-ci="${ci}" title="${t('Edit Category', 'تعديل الفئة')}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
           </button>
-          <button class="admin-act-btn del" data-action="del-cat" data-ci="${ci}" title="Delete Category">&times;</button>
+          <button class="admin-act-btn del" data-action="del-cat" data-ci="${ci}" title="${t('Delete Category', 'حذف الفئة')}">&times;</button>
         </span>`;
       catsWrap.appendChild(btn);
 
@@ -170,19 +170,21 @@
           ? `<span class="card-price strike">${item.base_price} ₪</span><span class="card-price">${item.discounted_price} ₪</span>`
           : `<span class="card-price">${item.price} ₪</span>`;
 
-        const sizeLabel = currentLang === 'ar' ? 'أحجام' : 'sizes';
-        const extraLabel = currentLang === 'ar' ? 'إضافات' : 'extras';
+        const sizeLabel  = t('sizes',  'أحجام');
+        const extraLabel = t('extras', 'إضافات');
 
         card.innerHTML = `
           <div class="admin-card-actions">
-            <button class="admin-act-btn edit" data-action="edit-item" data-ci="${ci}" data-ii="${ii}" title="Edit Item">
+            <button class="admin-act-btn edit" data-action="edit-item" data-ci="${ci}" data-ii="${ii}" title="${t('Edit Item', 'تعديل المنتج')}">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
             </button>
-            <button class="admin-act-btn del" data-action="del-item" data-ci="${ci}" data-ii="${ii}" title="Delete Item">&times;</button>
+            <button class="admin-act-btn del" data-action="del-item" data-ci="${ci}" data-ii="${ii}" title="${t('Delete Item', 'حذف المنتج')}">&times;</button>
           </div>
           <div class="card-img">
-            ${coverImg ? `<img src="${coverImg}" alt="${displayName}" loading="lazy">` : '<div style="width:100%;height:100%;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:2rem;">📷</div>'}
-            ${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
+            ${coverImg
+              ? `<img src="${coverImg}" alt="${displayName}" loading="lazy">`
+              : `<div style="width:100%;height:100%;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:2rem;">📷</div>`}
+            ${item.badge         ? `<span class="badge">${item.badge}</span>`                   : ''}
             ${item.discount_label ? `<span class="discount-pill">${item.discount_label}</span>` : ''}
           </div>
           <div class="card-body">
@@ -190,7 +192,7 @@
             <p class="card-desc">${displayDesc}</p>
             <div class="card-foot">
               ${priceHtml}
-              ${item.sizes?.length ? `<span class="card-meta-chip">${item.sizes.length} ${sizeLabel}</span>` : ''}
+              ${item.sizes?.length  ? `<span class="card-meta-chip">${item.sizes.length} ${sizeLabel}</span>`   : ''}
               ${item.addons?.length ? `<span class="card-meta-chip">${item.addons.length} ${extraLabel}</span>` : ''}
             </div>
           </div>`;
@@ -228,12 +230,12 @@
       const ci = parseInt(actBtn.dataset.ci);
       const ii = actBtn.dataset.ii !== undefined ? parseInt(actBtn.dataset.ii) : null;
 
-      if (action === 'edit-cat') openCategoryModal(ci);
-      if (action === 'del-cat') openConfirmModal('category', ci);
-      if (action === 'edit-item') openItemModal(ci, ii);
-      if (action === 'del-item') openConfirmModal('item', ci, ii);
-      if (action === 'cat-left') moveCategory(ci, -1);
-      if (action === 'cat-right') moveCategory(ci, 1);
+      if (action === 'edit-cat')   openCategoryModal(ci);
+      if (action === 'del-cat')    openConfirmModal('category', ci);
+      if (action === 'edit-item')  openItemModal(ci, ii);
+      if (action === 'del-item')   openConfirmModal('item', ci, ii);
+      if (action === 'cat-left')   moveCategory(ci, -1);
+      if (action === 'cat-right')  moveCategory(ci,  1);
       return;
     }
 
@@ -254,7 +256,7 @@
     if (newIdx < 0 || newIdx >= cats.length) return;
     [cats[ci], cats[newIdx]] = [cats[newIdx], cats[ci]];
     renderMenu();
-    showToast('Category reordered.');
+    showToast(t('Category reordered.', 'تم إعادة ترتيب الفئة.'));
   }
 
   /* ═══════════════════════════════════════════
@@ -283,15 +285,20 @@
     catSlugManual = false;
     const modal = $('#modal-category');
     const isEdit = ci >= 0;
-    $('#modal-cat-title').textContent = isEdit ? 'Edit Category' : 'Add Category';
+    $('#modal-cat-title').textContent = t(
+      isEdit ? 'Edit Category' : 'Add Category',
+      isEdit ? 'تعديل الفئة'  : 'إضافة فئة'
+    );
 
-    const cat = isEdit ? menuState.menu.categories[ci] : { title: '', title_ar: '', eyebrow: '', eyebrow_ar: '', icon: '', slug: '' };
-    $('#cat-title').value = cat.title || '';
+    const cat = isEdit ? menuState.menu.categories[ci] : {
+      title: '', title_ar: '', eyebrow: '', eyebrow_ar: '', icon: '', slug: ''
+    };
+    $('#cat-title').value    = cat.title    || '';
     $('#cat-title-ar').value = cat.title_ar || '';
-    $('#cat-eyebrow').value = cat.eyebrow || '';
+    $('#cat-eyebrow').value    = cat.eyebrow    || '';
     $('#cat-eyebrow-ar').value = cat.eyebrow_ar || '';
-    $('#cat-icon').value = cat.icon || '';
-    $('#cat-slug').value = cat.slug || '';
+    $('#cat-icon').value  = cat.icon  || '';
+    $('#cat-slug').value  = cat.slug  || '';
     updateCatSlugHint(cat.slug ? true : false);
 
     openModal(modal);
@@ -300,10 +307,10 @@
   function updateCatSlugHint(isManual) {
     const hint = $('#cat-slug-hint');
     if (isManual) {
-      hint.textContent = 'Manually edited';
+      hint.textContent = t('Manually edited', 'تم التعديل يدوياً');
       hint.classList.add('manual');
     } else {
-      hint.textContent = 'Auto from title';
+      hint.textContent = t('Auto from title', 'تلقائي من العنوان');
       hint.classList.remove('manual');
     }
   }
@@ -325,16 +332,19 @@
     // Apply
     $('#cat-apply').addEventListener('click', () => {
       const title = $('#cat-title').value.trim();
-      if (!title) { showToast('Title is required.', 'danger'); return; }
+      if (!title) {
+        showToast(t('Title is required.', 'العنوان مطلوب.'), 'danger');
+        return;
+      }
 
       const data = {
-        title: title,
-        title_ar: $('#cat-title-ar').value.trim(),
-        eyebrow: $('#cat-eyebrow').value.trim(),
+        title:      title,
+        title_ar:   $('#cat-title-ar').value.trim(),
+        eyebrow:    $('#cat-eyebrow').value.trim(),
         eyebrow_ar: $('#cat-eyebrow-ar').value.trim(),
-        icon: $('#cat-icon').value.trim(),
-        slug: $('#cat-slug').value.trim() || slugify(title),
-        items: editCatIndex >= 0 ? menuState.menu.categories[editCatIndex].items : []
+        icon:       $('#cat-icon').value.trim(),
+        slug:       $('#cat-slug').value.trim() || slugify(title),
+        items:      editCatIndex >= 0 ? menuState.menu.categories[editCatIndex].items : []
       };
 
       if (editCatIndex >= 0) {
@@ -345,7 +355,7 @@
 
       renderMenu();
       closeModal($('#modal-category'));
-      showToast('Category saved.');
+      showToast(t('Category saved.', 'تم حفظ الفئة.'));
     });
   }
 
@@ -354,16 +364,19 @@
   ═══════════════════════════════════════════ */
   function openItemModal(ci, ii = -1) {
     editItemCatIndex = ci;
-    editItemIndex = ii;
-    itemSlugManual = false;
-    const modal = $('#modal-item');
+    editItemIndex    = ii;
+    itemSlugManual   = false;
+    const modal  = $('#modal-item');
     const isEdit = ii >= 0;
-    $('#modal-item-title').textContent = isEdit ? 'Edit Item' : 'Add Item';
+    $('#modal-item-title').textContent = t(
+      isEdit ? 'Edit Item' : 'Add Item',
+      isEdit ? 'تعديل المنتج' : 'إضافة منتج'
+    );
 
     // Populate category dropdown
     const catSelect = $('#item-category');
     catSelect.innerHTML = menuState.menu.categories.map((c, i) =>
-      `<option value="${i}" ${i === ci ? 'selected' : ''}>${c.title}</option>`
+      `<option value="${i}" ${i === ci ? 'selected' : ''}>${t(c.title, c.title_ar)}</option>`
     ).join('');
 
     const item = isEdit ? menuState.menu.categories[ci].items[ii] : {
@@ -374,13 +387,13 @@
     };
 
     // Populate fields
-    $('#item-name').value = item.name || '';
+    $('#item-name').value    = item.name    || '';
     $('#item-name-ar').value = item.name_ar || '';
-    $('#item-desc').value = item.description || '';
+    $('#item-desc').value    = item.description    || '';
     $('#item-desc-ar').value = item.description_ar || '';
     $('#item-base-price').value = item.base_price || 0;
-    $('#item-badge').value = item.badge || '';
-    $('#item-slug').value = item.slug || '';
+    $('#item-badge').value   = item.badge || '';
+    $('#item-slug').value    = item.slug  || '';
     updateItemSlugHint(item.slug ? true : false);
 
     // Discount
@@ -414,10 +427,10 @@
   function updateItemSlugHint(isManual) {
     const hint = $('#item-slug-hint');
     if (isManual) {
-      hint.textContent = 'Manually edited';
+      hint.textContent = t('Manually edited', 'تم التعديل يدوياً');
       hint.classList.add('manual');
     } else {
-      hint.textContent = 'Auto from name';
+      hint.textContent = t('Auto from name', 'تلقائي من الاسم');
       hint.classList.remove('manual');
     }
   }
@@ -432,9 +445,9 @@
 
   function updateDiscountPreview() {
     const basePrice = parseFloat($('#item-base-price').value) || 0;
-    const discVal = parseFloat($('#item-disc-value').value) || 0;
-    const labelEl = $('#disc-preview-label');
-    const priceEl = $('#disc-preview-price');
+    const discVal   = parseFloat($('#item-disc-value').value) || 0;
+    const labelEl   = $('#disc-preview-label');
+    const priceEl   = $('#disc-preview-price');
 
     if (!discVal || !basePrice) {
       labelEl.textContent = '';
@@ -445,10 +458,10 @@
     let finalPrice, labelText;
     if (discountType === 'percent') {
       finalPrice = +(basePrice * (1 - discVal / 100)).toFixed(2);
-      labelText = `${discVal}% OFF`;
+      labelText  = t(`${discVal}% OFF`, `خصم ${discVal}%`);
     } else {
       finalPrice = +Math.max(0, basePrice - discVal).toFixed(2);
-      labelText = `${discVal} ₪ OFF`;
+      labelText  = t(`${discVal} ₪ OFF`, `خصم ${discVal} ₪`);
     }
 
     labelEl.textContent = labelText;
@@ -461,7 +474,7 @@
     scroll.innerHTML = '';
 
     if (!currentImages.length) {
-      scroll.innerHTML = '<div class="admin-img-empty">No images yet. Upload one below.</div>';
+      scroll.innerHTML = `<div class="admin-img-empty">${t('No images yet. Upload one below.', 'لا توجد صور بعد. ارفع صورة أدناه.')}</div>`;
       return;
     }
 
@@ -469,13 +482,13 @@
       const card = document.createElement('div');
       card.className = `admin-img-card${i === 0 ? ' is-cover' : ''}`;
       card.innerHTML = `
-        <img src="${src}" alt="Image ${i + 1}" />
+        <img src="${src}" alt="${t('Image', 'صورة')} ${i + 1}" />
         <div class="img-reorder">
-          ${i > 0 ? `<button class="img-move-btn" data-dir="left" data-idx="${i}" title="Move left">◀</button>` : ''}
-          ${i < currentImages.length - 1 ? `<button class="img-move-btn" data-dir="right" data-idx="${i}" title="Move right">▶</button>` : ''}
+          ${i > 0                          ? `<button class="img-move-btn" data-dir="left"  data-idx="${i}" title="${t('Move left',  'تحريك لليسار')}">◀</button>` : ''}
+          ${i < currentImages.length - 1  ? `<button class="img-move-btn" data-dir="right" data-idx="${i}" title="${t('Move right', 'تحريك لليمين')}">▶</button>` : ''}
         </div>
-        <button class="img-del-btn" data-idx="${i}" title="Delete image">&times;</button>
-        ${i === 0 ? '<div class="img-cover-badge">Cover</div>' : ''}
+        <button class="img-del-btn" data-idx="${i}" title="${t('Delete image', 'حذف الصورة')}">&times;</button>
+        ${i === 0 ? `<div class="img-cover-badge">${t('Cover', 'الغلاف')}</div>` : ''}
       `;
       scroll.appendChild(card);
     });
@@ -484,8 +497,8 @@
     scroll.querySelectorAll('.img-move-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const idx = parseInt(btn.dataset.idx);
-        const dir = btn.dataset.dir === 'left' ? -1 : 1;
+        const idx    = parseInt(btn.dataset.idx);
+        const dir    = btn.dataset.dir === 'left' ? -1 : 1;
         const newIdx = idx + dir;
         if (newIdx < 0 || newIdx >= currentImages.length) return;
         [currentImages[idx], currentImages[newIdx]] = [currentImages[newIdx], currentImages[idx]];
@@ -496,8 +509,7 @@
     scroll.querySelectorAll('.img-del-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const idx = parseInt(btn.dataset.idx);
-        currentImages.splice(idx, 1);
+        currentImages.splice(parseInt(btn.dataset.idx), 1);
         renderImageGallery();
       });
     });
@@ -510,16 +522,16 @@
     div.className = 'admin-list-item';
     div.innerHTML = `
       <div class="admin-list-label-group">
-        <input type="text" value="${label}" placeholder="Size name (EN)" data-field="label" />
+        <input type="text" value="${label}"    placeholder="${t('Size name (EN)', 'اسم الحجم (EN)')}"  data-field="label" />
         <div class="admin-list-sep"></div>
-        <input type="text" value="${labelAr}" placeholder="اسم الحجم (AR)" data-field="label_ar" dir="rtl" />
+        <input type="text" value="${labelAr}"  placeholder="${t('Size name (AR)', 'اسم الحجم (AR)')}"  data-field="label_ar" dir="rtl" />
       </div>
       <div class="admin-list-price-group">
         <span class="size-price-prefix">+</span>
         <input type="number" value="${deltaPrice}" step="0.1" min="0" placeholder="0" data-field="delta_price" />
         <span class="size-price-suffix">₪</span>
       </div>
-      <button class="rm-btn" type="button">&times;</button>
+      <button class="rm-btn" type="button" title="${t('Remove', 'إزالة')}">&times;</button>
     `;
     div.querySelector('.rm-btn').addEventListener('click', () => div.remove());
     container.appendChild(div);
@@ -533,16 +545,16 @@
     div.className = 'admin-list-item';
     div.innerHTML = `
       <div class="admin-list-label-group">
-        <input type="text" value="${label}" placeholder="Extra name (EN)" data-field="label" />
+        <input type="text" value="${label}"   placeholder="${t('Extra name (EN)', 'اسم الإضافة (EN)')}" data-field="label" />
         <div class="admin-list-sep"></div>
-        <input type="text" value="${labelAr}" placeholder="اسم الإضافة (AR)" data-field="label_ar" dir="rtl" />
+        <input type="text" value="${labelAr}" placeholder="${t('Extra name (AR)', 'اسم الإضافة (AR)')}" data-field="label_ar" dir="rtl" />
       </div>
       <div class="admin-list-price-group">
         <span class="addon-price-prefix">+</span>
         <input type="number" value="${price}" step="0.1" min="0" placeholder="0" data-field="price" />
         <span class="addon-price-suffix">₪</span>
       </div>
-      <button class="rm-btn" type="button">&times;</button>
+      <button class="rm-btn" type="button" title="${t('Remove', 'إزالة')}">&times;</button>
     `;
     div.querySelector('.rm-btn').addEventListener('click', () => div.remove());
     container.appendChild(div);
@@ -608,21 +620,24 @@
     // Apply item
     $('#item-apply').addEventListener('click', () => {
       const name = $('#item-name').value.trim();
-      if (!name) { showToast('Item name is required.', 'danger'); return; }
+      if (!name) {
+        showToast(t('Item name is required.', 'اسم المنتج مطلوب.'), 'danger');
+        return;
+      }
 
       const basePrice = parseFloat($('#item-base-price').value) || 0;
-      const discVal = parseFloat($('#item-disc-value').value) || 0;
+      const discVal   = parseFloat($('#item-disc-value').value) || 0;
 
       // Calculate discount
       let discountedPrice = null;
-      let discountLabel = '';
+      let discountLabel   = '';
       if (discVal > 0 && basePrice > 0) {
         if (discountType === 'percent') {
           discountedPrice = +(basePrice * (1 - discVal / 100)).toFixed(2);
-          discountLabel = `${discVal}% OFF`;
+          discountLabel   = `${discVal}% OFF`;
         } else {
           discountedPrice = +Math.max(0, basePrice - discVal).toFixed(2);
-          discountLabel = `${discVal} ₪ OFF`;
+          discountLabel   = `${discVal} ₪ OFF`;
         }
       }
 
@@ -631,38 +646,38 @@
       // Parse sizes
       const sizes = [];
       $$('#item-sizes-list .admin-list-item').forEach(row => {
-        const label = row.querySelector('input[data-field="label"]')?.value.trim() || '';
-        const labelAr = row.querySelector('input[data-field="label_ar"]')?.value.trim() || '';
-        const delta = parseFloat(row.querySelector('input[data-field="delta_price"]')?.value) || 0;
+        const label   = row.querySelector('input[data-field="label"]')?.value.trim()      || '';
+        const labelAr = row.querySelector('input[data-field="label_ar"]')?.value.trim()   || '';
+        const delta   = parseFloat(row.querySelector('input[data-field="delta_price"]')?.value) || 0;
         if (label) sizes.push({ label, label_ar: labelAr, delta_price: delta });
       });
 
       // Parse addons
       const addons = [];
       $$('#item-addons-list .admin-list-item').forEach(row => {
-        const label = row.querySelector('input[data-field="label"]')?.value.trim() || '';
+        const label   = row.querySelector('input[data-field="label"]')?.value.trim()    || '';
         const labelAr = row.querySelector('input[data-field="label_ar"]')?.value.trim() || '';
-        const price = parseFloat(row.querySelector('input[data-field="price"]')?.value) || 0;
+        const price   = parseFloat(row.querySelector('input[data-field="price"]')?.value) || 0;
         if (label) addons.push({ label, label_ar: labelAr, price });
       });
 
       const newItem = {
-        name: name,
-        name_ar: $('#item-name-ar').value.trim(),
-        description: $('#item-desc').value.trim(),
-        description_ar: $('#item-desc-ar').value.trim(),
-        base_price: basePrice,
-        price: basePrice,
+        name:             name,
+        name_ar:          $('#item-name-ar').value.trim(),
+        description:      $('#item-desc').value.trim(),
+        description_ar:   $('#item-desc-ar').value.trim(),
+        base_price:       basePrice,
+        price:            basePrice,
         discounted_price: discountedPrice,
-        discount_type: discountType,
-        discount_value: discVal,
-        discount_label: discountLabel,
-        badge: $('#item-badge').value.trim(),
-        slug: $('#item-slug').value.trim() || slugify(name),
-        image_url: coverImg,
-        images: [...currentImages],
-        sizes: sizes,
-        addons: addons
+        discount_type:    discountType,
+        discount_value:   discVal,
+        discount_label:   discountLabel,
+        badge:            $('#item-badge').value.trim(),
+        slug:             $('#item-slug').value.trim() || slugify(name),
+        image_url:        coverImg,
+        images:           [...currentImages],
+        sizes:            sizes,
+        addons:           addons
       };
 
       // Target category index from dropdown (handles moving items)
@@ -681,7 +696,7 @@
 
       renderMenu();
       closeModal($('#modal-item'));
-      showToast('Item saved.');
+      showToast(t('Item saved.', 'تم حفظ المنتج.'));
     });
   }
 
@@ -691,10 +706,13 @@
   function openConfirmModal(type, ci, ii = null) {
     pendingDelete = { type, ci, ii };
     const modal = $('#modal-confirm');
-    const name = type === 'category'
-      ? menuState.menu.categories[ci].title
-      : menuState.menu.categories[ci].items[ii].name;
-    $('#confirm-message').textContent = `Delete "${name}"? This cannot be undone.`;
+    const name  = type === 'category'
+      ? t(menuState.menu.categories[ci].title,            menuState.menu.categories[ci].title_ar)
+      : t(menuState.menu.categories[ci].items[ii].name,   menuState.menu.categories[ci].items[ii].name_ar);
+    $('#confirm-message').textContent = t(
+      `Delete "${name}"? This cannot be undone.`,
+      `حذف "${name}"؟ لا يمكن التراجع عن هذا الإجراء.`
+    );
     openModal(modal);
   }
 
@@ -709,13 +727,13 @@
     pendingDelete = null;
     renderMenu();
     closeModal($('#modal-confirm'));
-    showToast('Deleted successfully.', 'danger');
+    showToast(t('Deleted successfully.', 'تم الحذف بنجاح.'), 'danger');
   });
 
   /* ═══════════════════════════════════════════
      MODAL UTILS
   ═══════════════════════════════════════════ */
-  function openModal(m) { m.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function openModal(m)  { m.classList.add('open');    document.body.style.overflow = 'hidden'; }
   function closeModal(m) { m.classList.remove('open'); document.body.style.overflow = ''; }
 
   function setupModals() {
@@ -737,7 +755,7 @@
 
     $('#btn-add-item').addEventListener('click', () => {
       if (menuState.menu.categories.length === 0) {
-        showToast('Please add a category first.', 'danger');
+        showToast(t('Please add a category first.', 'يرجى إضافة فئة أولاً.'), 'danger');
         return;
       }
       openItemModal(0); // Default to first category
@@ -745,19 +763,19 @@
 
     $('#btn-save-draft').addEventListener('click', () => {
       localStorage.setItem('abushukri_menu_draft', JSON.stringify(menuState));
-      showToast('Draft saved!');
+      showToast(t('Draft saved!', 'تم حفظ المسودة!'));
     });
 
     $('#btn-publish').addEventListener('click', () => {
       localStorage.setItem('abushukri_menu_published', JSON.stringify(menuState));
       localStorage.removeItem('abushukri_menu_draft');
-      showToast('Menu published!');
+      showToast(t('Menu published!', 'تم نشر القائمة!'));
     });
 
     $('#admin-discard-btn').addEventListener('click', () => {
       parseState(); // Reset to original or published
       renderMenu();
-      showToast('Changes discarded.', 'danger');
+      showToast(t('Changes discarded.', 'تم تجاهل التغييرات.'), 'danger');
     });
   }
 
@@ -765,9 +783,9 @@
      TOAST
   ═══════════════════════════════════════════ */
   function showToast(msg, type = 'success') {
-    const c = $('#admin-toast');
+    const c  = $('#admin-toast');
     const el = document.createElement('div');
-    el.className = `admin-toast-msg admin-toast-msg--${type}`;
+    el.className   = `admin-toast-msg admin-toast-msg--${type}`;
     el.textContent = msg;
     c.appendChild(el);
     setTimeout(() => el.remove(), 3200);
